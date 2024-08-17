@@ -13,11 +13,20 @@ const cors = require('cors')
 
 
 Dbconnect() 
-app.use(cors({
-    origin: 'https://frontendecommerce-seven.vercel.app/', 
-    credentials: true
-}));
+const allowedOrigins = [
+    'https://frontendecommerce-f01jty5s0-don-thampys-projects.vercel.app',
+    'https://frontendecommerce-seven.vercel.app'  // Include this if it's also relevant
+];
 
+app.use(cors({
+    origin: function (origin, callback) {
+        if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    }
+}));
 
 app.use(express.json())
 app.use('/auth',authRouter.router)
